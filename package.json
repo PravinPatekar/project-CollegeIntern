@@ -1,0 +1,25 @@
+{
+  "name": "open_to_intern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shikhamungali/Project2-Internship.git"
+  },
+  "author": "Shikha Mungali,Sonal Gill,Pravin Patekar,Rana Mahato",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shikhamungali/Project2-Internship/issues"
+  },
+  "homepage": "https://github.com/shikhamungali/Project2-Internship#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "express": "^4.18.1",
+    "mongoose": "^6.6.0",
+    "nodemon": "^2.0.19"
+  }
+}
