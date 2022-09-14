@@ -10,6 +10,9 @@ const createIntern = async function (req, res) {
     if(Object.keys(req.query) != 0){
         return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
     }
+    if(!req.body){
+        return res.status(400).send({ status: false, message: "Provide some data  !!" })
+    }
     if (!name) {
         return res.status(400).send({ status: false, message: "Name is mandaotory !!" })
     }
