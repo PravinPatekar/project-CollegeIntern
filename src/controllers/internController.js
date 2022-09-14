@@ -1,52 +1,65 @@
-const validator = require('validator')
 const internModel = require('../models/internModel')
 const collegeModel = require('../models/collegeModel')
 
 const createIntern = async function (req, res) {
+   try{ 
     let data = req.body
     let { name, email, mobile, collegeName } = data
 
     //---------------------------------------validations-------------------------------------------------------------------------------//
-    if (!name) {
-        res.status(400).send({ status: false, message: "Name is mandaotory !!" })
+    if(Object.keys(req.query) != 0){
+        return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
     }
-    let Name = /^[a-zA-Z ]+$/.test(name)
-    if(!Name){
-        res.status(400).send({ status: false, message: `${name} can be in alphabets only !!` })
+    if (!name) {
+        return res.status(400).send({ status: false, message: "Name is mandaotory !!" })
+    }
+    let Name = /^[a-zA-Z\s]+$/.test(name)
+    if (!Name) {
+        return res.status(400).send({ status: false, message: `${name} can be in alphabets only !!` })
     }
 
     if (!email) {
-        res.status(400).send({ status: false, message: "E-mail is mandaotory !!" })
-    } if (!validator.isEmail(email)) {
-        res.status(400).send({ status: false, message: `${email} is not a valid E-mail !!` })
+        return res.status(400).send({ status: false, message: "E-mail is mandaotory !!" })
+    } 
+    let emailValid = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email)
+    if (!emailValid) {
+        return res.status(400).send({ status: false, message: `${email} is not a valid E-mail !!` })
     }
 
     if (!mobile) {
-        res.status(400).send({ status: false, message: "Mobile is mandaotory !!" })
-    } if (!validator.isMobilePhone(mobile)) {
-        res.status(400).send({ status: false, message: `${mobile} is not a valid Mobile Number !!` })
+        return res.status(400).send({ status: false, message: "Mobile is mandaotory !!" })
+    }
+    let mobileValid = /^(\+\d{1,3}[- ]?)?\d{10}$/.test(mobile)
+     if (!mobileValid) {
+        return res.status(400).send({ status: false, message: `${mobile} is not a valid Mobile Number !!` })
     }
 
-    if(!collegeName){
-        res.status(400).send({ status: false, message: "Please provide the Name of Your College !!" })
+    if (!collegeName) {
+        return res.status(400).send({ status: false, message: "Please provide the Name of Your College !!" })
     }
 
-    let checkEmail = await internModel.findOne(email)
-    if(!checkEmail){
-        res.status(400).send({status: false, message: `${email} already exists !!`})
+    let checkEmail = await internModel.findOne({email : email})
+    if (checkEmail) {
+        return res.status(400).send({ status: false, message: `${email} already exists !!` })
     }
 
-    let checkMobile = await internModel.findOne(mobile)
-    if(!checkMobile){
-        res.status(400).send({status: false, message: `${mobile} already exists !!`})
+    let checkMobile = await internModel.findOne({mobile: mobile})
+    if (checkMobile) {
+        return res.status(400).send({ status: false, message: `${mobile} already exists !!` })
     }
 
-    let checkCollege = await collegeModel.findOne(collegeName)
-    if(!checkCollege){
-        res.status(400).send({status: false, message: `${collegeName} does not exist !!`})
+    let checkCollege = await collegeModel.findOne({name: collegeName})
+    if (!checkCollege) {
+        return res.status(400).send({ status: false, message: `${collegeName} does not exist !!` })
     }
-    res.body.collegeId = checkCollege._id
+    req.body.collegeId = checkCollege._id
     let intern = await internModel.create(data)
-    res.status(400).send({status: true, data: intern})
+    res.status(400).send({ status: true, data: intern })
+}
+catch(error){
+    res.status(500).send({status: false, message: error.message})
+}
 
 }
+
+module.exports = { createIntern }
