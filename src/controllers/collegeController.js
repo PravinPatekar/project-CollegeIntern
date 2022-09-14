@@ -1,6 +1,7 @@
 const axios = require('axios')
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
+const { createIntern } = require('./internController')
 
 
 
@@ -8,10 +9,10 @@ const internModel = require('../models/internModel')
 const nameRegex = /^[a-zA-Z]+$/i
 
 //============================================ creating a college ==========================================
-const createCollege = async function (req,res){
-    try{
-        if(Object.keys(req.query).length===0){
-             
+const createCollege = async function (req, res) {
+    try {
+        if (Object.keys(req.query).length === 0) {
+
             const data = req.body
             //================ if no data is provided in body ================================
             if (Object.keys(data).length == 0) {
@@ -38,7 +39,7 @@ const createCollege = async function (req,res){
             if (!data.logoLink) {
                 return res.status(400).send({ status: false, msg: "Please Provide logoLink" })
             }
-             
+
             //=========================== if logo link is not correct =================================
             let correctLink = false
             await axios.get(data.logoLink)
@@ -50,8 +51,8 @@ const createCollege = async function (req,res){
                 })
                 .catch((error) => { correctLink = false })
 
-            if (correctLink == false){
-             return res.status(400).send({ status: false, message: "Provide correct Logo Link" })
+            if (correctLink == false) {
+                return res.status(400).send({ status: false, message: "Provide correct Logo Link" })
             };
 
             // ============================ if logo link is duplicate ==================================
@@ -61,60 +62,59 @@ const createCollege = async function (req,res){
             }
             //===================================== creating a college data ==============================
             let collegeCreation = await collegeModel.create(data)
-            return res.status(201).send({ status: true, data: collegeCreation})
+            return res.status(201).send({ status: true, data: collegeCreation })
 
 
         }
-        else{
-            return res.status(400).send({status:false,msg:"Invalid request,do not provide data in query params."})
+        else {
+            return res.status(400).send({ status: false, msg: "Invalid request,do not provide data in query params." })
         }
 
     }
-    catch(error){
+    catch (error) {
         return res.status(500).send({ status: false, msg: err.message })
     }
 }
 
 
+//====================================getting college and interns =======================================
 
+const getDetails = async function (req, res) {
+    try {
+        obj = { isDeleted: false };
+        const name = req.query.collegeName;
 
-
-
-
-const getDetails=async function(req,res){
-    try{
-        obj={isDeleted:false};
-        const name=req.query.collegeName;
-        
-        if(!name){
+        if (!name) {
             return res.status(400).send({ status: false, msg: "Query Params are mandatory." })
         }
-           if(name){obj.name=name}
-        
-        let getdata=await collegeModel.findOne(obj)
-        if(!getdata){
-           return  res.status(400).send({status:false,msg:"college does not exist"})
+        if (name) { obj.name = name }
+
+        let getdata = await collegeModel.findOne(obj)
+        if (!getdata) {
+            return res.status(400).send({ status: false, msg: "college does not exist" })
         }
 
-        let internsData = await internModel.find({collegeId:getdata._id,isDeleted:false}).select({_id:1,name:1,email:1,mobile:1})
-         return res.status(200).send(
-            {status:true,
-            data:{
-            name:getdata.name,
-            fullName:getdata.fullName,
-            logoLink:getdata.logoLink,
-            interns:internsData
-        }})
-    
+        let internsData = await internModel.find({ collegeId: getdata._id, isDeleted: false }).select({ _id: 1, name: 1, email: 1, mobile: 1 })
+        return res.status(200).send(
+            {
+                status: true,
+                data: {
+                    name: getdata.name,
+                    fullName: getdata.fullName,
+                    logoLink: getdata.logoLink,
+                    interns: internsData
+                }
+            })
+
     }
-catch(error){
-    return res.status(500).send(error.message)
+    catch (error) {
+        return res.status(500).send(error.message)
+    }
 }
-}
 
 
 
 
 
 
-module.exports = {createCollege,getDetails}
+module.exports = { createCollege, getDetails }
