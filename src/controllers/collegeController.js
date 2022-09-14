@@ -1,7 +1,6 @@
 const axios = require('axios')
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
-const { createIntern } = require('./internController')
 
 
 
