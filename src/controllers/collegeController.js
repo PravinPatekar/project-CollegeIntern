@@ -1,6 +1,7 @@
 const axios = require('axios')
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
+const { createIntern } = require('./internController')
 
 
 
@@ -75,22 +76,29 @@ const createCollege = async function (req,res){
     }
 }
 
+const getDetails=async function(req,res){
+try{
+        obj={isDeleted:false};
+        const name=req.query.collegeName;
+        
+        if(name){obj.name=name}
+        if(!name){return res.send({msg:"Query is Mendatory"})}
+
+      let getdata=await collegeModel.findOne(obj)
+      if(!getdata){
+        return  res.status(400).send({status:false,msg:"No College found"})
+     }
+      let data= await internModel.find({collegeId:getdata._id}).select({name:1,email:1,mobile:1})
+      
+        
+         return res.status(200).send({status:true,data:{name:getdata.name,fullName:getdata.fullName,logoLink:getdata.logoLink,interns:data}})
+    }
+catch(error){
+    return res.status(500).send(error.message)
+}
+}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-module.exports = {createCollege}
+module.exports = {createCollege,getDetails}
