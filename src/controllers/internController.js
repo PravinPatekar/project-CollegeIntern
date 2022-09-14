@@ -13,6 +13,10 @@ const createIntern = async function (req, res) {
         if (Object.keys(req.query) != 0) {
             return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
         }
+        //================================if data is not provided in body ===============================
+        if(!data){
+            return res.status(400).send({ status: false, message: "please enter data to create intern." })
+        }
         //============================== if name is not entered in body ================================
         if (!name) {
             return res.status(400).send({ status: false, message: "Name is mandatory !!" })
@@ -27,7 +31,7 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, message: "E-mail is mandatory !!" })
         }
         //================================== to check if email is of invalid format ===========================
-        let emailValid = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email)
+        let emailValid = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email)    
         if (!emailValid) {
             return res.status(400).send({ status: false, message: `${email} is not a valid E-mail !!` })
         }
@@ -36,7 +40,7 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, message: "Mobile is mandatory !!" })
         }
         //============================= if mobile no. is of in valid format =================================
-        let mobileValid = /^(\+\d{1,3}[- ]?)?\d{10}$/.test(mobile)
+        let mobileValid = /^(\+\d{1,3}[- ]?)?\d{10}$/.test(mobile) 
         if (!mobileValid) {
             return res.status(400).send({ status: false, message: `${mobile} is not a valid Mobile Number !!` })
         }
