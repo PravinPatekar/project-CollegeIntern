@@ -81,16 +81,40 @@ const createCollege = async function (req,res){
 
 
 
+const getDetails=async function(req,res){
+    try{
+        obj={isDeleted:false};
+        const name=req.query.collegeName;
+        
+        if(!name){
+            return res.status(400).send({ status: false, msg: "Query Params are mandatory." })
+        }
+           if(name){obj.name=name}
+        
+        let getdata=await collegeModel.findOne(obj)
+        if(!getdata){
+           return  res.status(400).send({status:false,msg:"college does not exist"})
+        }
+
+        let internsData = await internModel.find({collegeId:getdata._id,isDeleted:false}).select({_id:1,name:1,email:1,mobile:1})
+         return res.status(200).send(
+            {status:true,
+            data:{
+            name:getdata.name,
+            fullName:getdata.fullName,
+            logoLink:getdata.logoLink,
+            interns:internsData
+        }})
+    
+    }
+catch(error){
+    return res.status(500).send(error.message)
+}
+}
 
 
 
 
 
 
-
-
-
-
-
-
-module.exports = {createCollege}
+module.exports = {createCollege,getDetails}
