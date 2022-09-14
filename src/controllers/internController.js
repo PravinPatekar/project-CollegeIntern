@@ -54,7 +54,7 @@ const createIntern = async function (req, res) {
     }
     req.body.collegeId = checkCollege._id
     let intern = await internModel.create(data)
-    res.status(400).send({ status: true, data: intern })
+    res.status(201).send({ status: true, data: intern })
 }
 catch(error){
     res.status(500).send({status: false, message: error.message})
