@@ -1,6 +1,9 @@
 const internModel = require('../models/internModel')
 const collegeModel = require('../models/collegeModel')
 
+
+
+
 const createIntern = async function (req, res) {
     try {
         let data = req.body
@@ -43,18 +46,17 @@ const createIntern = async function (req, res) {
         if (checkEmail) {
             return res.status(400).send({ status: false, message: `${email} already exists !!` })
         }
-
+        //================================= duplicate mobile number ========================================
         let checkMobile = await internModel.findOne({ mobile: mobile })
         if (checkMobile) {
             return res.status(400).send({ status: false, message: `${mobile} already exists !!` })
         }
-
+        //============================= if college does not exist =========================================
         let checkCollege = await collegeModel.findOne({ name: collegeName })
         if (!checkCollege) {
             return res.status(400).send({ status: false, message: `${collegeName} does not exist !!` })
         }
-
-        //===============================================creating the intern====================================================//
+        //=================================== createing intern ==========================================
         req.body.collegeId = checkCollege._id
         let intern = await internModel.create(data)
         res.status(201).send({ status: true, data: intern })
@@ -64,5 +66,7 @@ const createIntern = async function (req, res) {
     }
 
 }
+
+
 
 module.exports = { createIntern }
