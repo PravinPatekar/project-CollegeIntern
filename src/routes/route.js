@@ -6,10 +6,10 @@ const { createIntern } = require('../controllers/internController')
 
 //============================================ creating college api ==========================================
 router.post('/functionup/colleges', createCollege)
-
-
-//===========geting the interns of a college============//
+//=========================== geting the interns of a college =================================================
 router.get('/functionup/collegeDetails',getDetails)
+
+
 
 //====================================== creating interns api =============================================
 router.post('/functionup/interns', createIntern)
