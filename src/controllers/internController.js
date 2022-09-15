@@ -16,7 +16,7 @@ const createIntern = async function (req, res) {
         }
         //================================if data is not provided in body ===============================
         if(Object.keys(data).length==0){
-            return res.status(400).send({ status: false, message: "please enter data to create intern." })
+            return res.status(400).send({ status: false, message: "Please enter some data to create intern !!" })
         }
         let Name = /^[a-zA-Z\s]+$/.test(name)
         if (!Name) {
