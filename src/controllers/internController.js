@@ -14,7 +14,7 @@ const createIntern = async function (req, res) {
             return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
         }
         //================================if data is not provided in body ===============================
-        if(!data){
+        if(Object.keys(data).length==0){
             return res.status(400).send({ status: false, message: "please enter data to create intern." })
         }
         //============================== if name is not entered in body ================================

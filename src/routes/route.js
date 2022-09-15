@@ -15,5 +15,13 @@ router.post('/functionup/interns', createIntern)
 
 
 
+//=========================== if the endpoint are correct or not ==========================================
+router.all("/**", function (req, res) {         
+    res.status(404).send({
+        status: false,
+        msg: "The api you request is not available"
+    })
+})
+
 
 module.exports = router
