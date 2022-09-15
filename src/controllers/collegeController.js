@@ -46,10 +46,8 @@ const createCollege = async function (req, res) {
                         if (res.headers["content-type"].startsWith("image/"))
                             correctLink = true;
                     }
-                }, error => {
-                    correctLink = false
                 })
-            // .catch((error) => { correctLink = false })
+            .catch((error) => { correctLink = false })
 
             if (correctLink == false) {
                 return res.status(400).send({ status: false, message: "Provide correct Logo Link !!" })
@@ -61,8 +59,9 @@ const createCollege = async function (req, res) {
                 return res.status(400).send({ status: false, message: `Logo Link already exists !!` });
             }
             //===================================== creating a college data ==============================
-            let collegeCreation = await collegeModel.create(data)
-            return res.status(201).send({ status: true, data: collegeCreation })
+            let collegeData = await collegeModel.create(data)
+            let newData = { name: collegeData.name, fullName: collegeData.fullName, logoLink: collegeData.logoLink, isDeleted: collegeData.isDeleted }
+            return res.status(201).send({ status: true, data: newData })
 
 
         }
