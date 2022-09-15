@@ -46,8 +46,10 @@ const createCollege = async function (req, res) {
                         if (res.headers["content-type"].startsWith("image/"))
                             correctLink = true;
                     }
+                }, error => {
+                    correctLink = false
                 })
-                .catch((error) => { correctLink = false })
+            // .catch((error) => { correctLink = false })
 
             if (correctLink == false) {
                 return res.status(400).send({ status: false, message: "Provide correct Logo Link !!" })
@@ -70,9 +72,12 @@ const createCollege = async function (req, res) {
 
     }
     catch (error) {
-        return res.status(500).send({ status: false, message: err.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 }
+
+
+
 
 
 //====================================getting college and interns =======================================
