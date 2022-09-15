@@ -14,28 +14,28 @@ const createCollege = async function (req, res) {
             const data = req.body
             //================ if no data is provided in body ================================
             if (Object.keys(data).length == 0) {
-                return res.status(400).send({ status: false, msg: "Please Provide Data" })
+                return res.status(400).send({ status: false, message: "Please Provide Some Data To Create !!" })
             }
             //==================== if no name is provided =======================================
             if (!data.name) {
-                return res.status(400).send({ status: false, msg: "Please Provide Name" })
+                return res.status(400).send({ status: false, message: "Please Provide Name !!" })
             }
             //======================== name should be unique ===================================
             const repeatedName = await collegeModel.findOne({ name: data.name });
             if (repeatedName) {
-                return res.status(400).send({ status: false, msg: "Name Already Exists..!" });
+                return res.status(400).send({ status: false, message: "Name Already Exists..!!" });
             }
             //========================= name is of invalid format ====================================
             if (!data.name.match(nameRegex)) {
-                return res.status(400).send({ status: false, msg: "invalid format of name" })
+                return res.status(400).send({ status: false, message: "invalid format of name !!" })
             }
             //============================== fullname not provided ===================================
             if (!data.fullName) {
-                return res.status(400).send({ status: false, msg: "Please Provide fullName" })
+                return res.status(400).send({ status: false, message: "Please Provide fullName !!" })
             }
             //=============================== logo link is not provided ===============================
             if (!data.logoLink) {
-                return res.status(400).send({ status: false, msg: "Please Provide logoLink" })
+                return res.status(400).send({ status: false, message: "Please Provide logoLink !!" })
             }
 
             //=========================== if logo link is not correct =================================
@@ -50,13 +50,13 @@ const createCollege = async function (req, res) {
                 .catch((error) => { correctLink = false })
 
             if (correctLink == false) {
-                return res.status(400).send({ status: false, message: "Provide correct Logo Link" })
+                return res.status(400).send({ status: false, message: "Provide correct Logo Link !!" })
             };
 
             // ============================ if logo link is duplicate ==================================
             let repeatedlogoLink = await collegeModel.findOne({ logoLink: data.logoLink });
             if (repeatedlogoLink) {
-                return res.status(400).send({ status: false, msg: `Logo Link already exists!` });
+                return res.status(400).send({ status: false, message: `Logo Link already exists !!` });
             }
             //===================================== creating a college data ==============================
             let collegeCreation = await collegeModel.create(data)
@@ -65,12 +65,12 @@ const createCollege = async function (req, res) {
 
         }
         else {
-            return res.status(400).send({ status: false, msg: "Invalid request,do not provide data in query params." })
+            return res.status(400).send({ status: false, message: "Invalid request,do not provide data in query params !!" })
         }
 
     }
     catch (error) {
-        return res.status(500).send({ status: false, msg: err.message })
+        return res.status(500).send({ status: false, message: err.message })
     }
 }
 
@@ -83,13 +83,13 @@ const getDetails = async function (req, res) {
         const name = req.query.collegeName;
 
         if (!name) {
-            return res.status(400).send({ status: false, msg: "Query Params are mandatory." })
+            return res.status(400).send({ status: false, message: "Please Provide some Filters !!" })
         }
         if (name) { obj.name = name }
 
         let getdata = await collegeModel.findOne(obj)
         if (!getdata) {
-            return res.status(400).send({ status: false, msg: "college does not exist" })
+            return res.status(400).send({ status: false, message: "College does not exist !!" })
         }
 
         let internsData = await internModel.find({ collegeId: getdata._id, isDeleted: false }).select({ _id: 1, name: 1, email: 1, mobile: 1 })
