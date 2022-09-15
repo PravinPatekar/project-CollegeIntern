@@ -70,7 +70,7 @@ const createCollege = async function (req, res) {
 
     }
     catch (error) {
-        return res.status(500).send({ status: false, message: err.message })
+        return res.status(500).send({ status: false, message: error.message })
     }
 }
 

@@ -18,6 +18,9 @@ const createIntern = async function (req, res) {
         if(Object.keys(data).length==0){
             return res.status(400).send({ status: false, message: "Please enter some data to create intern !!" })
         }
+        if(!name){
+            return res.status(400).send({ status: false, message: "Name is mandaotory !!" })
+        }
         let Name = /^[a-zA-Z\s]+$/.test(name)
         if (!Name) {
             return res.status(400).send({ status: false, message: `${name} can be in alphabets only !!` })
