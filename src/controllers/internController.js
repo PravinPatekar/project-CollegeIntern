@@ -14,8 +14,9 @@ const createIntern = async function (req, res) {
         if (Object.keys(req.query) != 0) {
             return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
         }
-        if (!name || !name.trim()) {
-            return res.status(400).send({ status: false, message: "Name is mandaotory !!" })
+        //================================if data is not provided in body ===============================
+        if(Object.keys(data).length==0){
+            return res.status(400).send({ status: false, message: "please enter data to create intern." })
         }
         let Name = /^[a-zA-Z\s]+$/.test(name)
         if (!Name) {
