@@ -11,7 +11,7 @@ const createIntern = async function (req, res) {
 
         //=============================== if filters are provided ==========================================
 
-        if (Object.keys(req.query) != 0) {
+        if (Object.keys(req.query).length != 0) {
             return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
         }
         //================================if data is not provided in body ===============================
@@ -29,6 +29,9 @@ const createIntern = async function (req, res) {
         let Name = /^[a-zA-Z\s]+$/.test(name)
         if (!Name) {
             return res.status(400).send({ status: false, message: `${name} can be in alphabets only !!` })
+        }
+        if(!name.trim()){
+            return res.status(400).send({ status: false, message: `Name can not be  an empty string !!` })
         }
         //================================== email is mandatory ===========================================
         if (!email) {
