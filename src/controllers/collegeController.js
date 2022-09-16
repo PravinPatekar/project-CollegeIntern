@@ -47,7 +47,7 @@ const createCollege = async function (req, res) {
                             correctLink = true;
                     }
                 })
-            .catch((error) => { correctLink = false })
+                .catch((error) => { correctLink = false })
 
             if (correctLink == false) {
                 return res.status(400).send({ status: false, message: "Provide correct Logo Link !!" })
@@ -60,7 +60,14 @@ const createCollege = async function (req, res) {
             }
             //===================================== creating a college data ==============================
             let collegeData = await collegeModel.create(data)
-            let newData = { name: collegeData.name, fullName: collegeData.fullName, logoLink: collegeData.logoLink, isDeleted: collegeData.isDeleted }
+
+            let newData = {
+                name: collegeData.name,
+                fullName: collegeData.fullName,
+                logoLink: collegeData.logoLink,
+                isDeleted: collegeData.isDeleted
+            }
+
             return res.status(201).send({ status: true, data: newData })
 
 
@@ -85,13 +92,13 @@ const getDetails = async function (req, res) {
     try {
         obj = { isDeleted: false };
         const name = req.query.collegeName;
+    
         //============================ if filters are not provided ==================================
         if (!name) {
             return res.status(400).send({ status: false, message: "Please Provide some Filters !!" })
         }
-        if (name) { obj.name = name }
 
-        let getdata = await collegeModel.findOne(obj)
+        let getdata = await collegeModel.findOne({$and:[obj,{"name":{$regex:name,$options:"i"}}]})
         //=========================== if college does not exist or deleted ============================
         if (!getdata) {
             return res.status(400).send({ status: false, message: "College does not exist !!" })

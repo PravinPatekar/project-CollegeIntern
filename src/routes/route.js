@@ -17,7 +17,7 @@ router.post('/functionup/interns', createIntern)
 
 
 //=========================== if the endpoint are correct or not ==========================================
-router.all("/**", function (req, res) {
+router.all("*", function (req, res) {
     res.status(404).send({
         status: false,
         message: "The Path you are requesting is not available !!"
