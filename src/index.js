@@ -1,9 +1,11 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const multer= require('multer')
 const route = require('./routes/route')
 const app = express()
 
 app.use(express.json())
+app.use(multer().any())
 
 
 mongoose.connect("mongodb+srv://Group36Database:P5c2dhNmjoQYx3NJ@cluster0.jreuson.mongodb.net/Group36_DB?retryWrites=true&w=majority", {
@@ -20,6 +22,6 @@ mongoose.connect("mongodb+srv://Group36Database:P5c2dhNmjoQYx3NJ@cluster0.jreuso
 
 app.use('/', route)
 
-app.listen(process.env.PORT || 3000, function () {
-    console.log('Express app is running on port ' + (process.env.PORT || 3000))
+app.listen(process.env.PORT || 3001, function () {
+    console.log('Express app is running on port ' + (process.env.PORT || 3001))
 })

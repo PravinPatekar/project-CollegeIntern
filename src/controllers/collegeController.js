@@ -89,6 +89,7 @@ const createCollege = async function (req, res) {
 //====================================getting college and interns =======================================
 
 const getDetails = async function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin","*")
     try {
         obj = { isDeleted: false };
         const name = req.query.collegeName;
